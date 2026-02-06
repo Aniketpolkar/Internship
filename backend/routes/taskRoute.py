@@ -16,6 +16,11 @@ from auth.auth import (
 )
 router = APIRouter(tags=["tasks"])
 
+@router.get("/")
+async def hello_world():
+    print("hello world")
+    return "backend running smoothly"
+
 # # ---------- CREATE TASK (PROTECTED) ----------
 @router.post("/tasks", response_model=TaskResponse)
 async def create_task(task: TaskCreate,current_user=Depends(get_current_user), db=Depends(get_database)):
