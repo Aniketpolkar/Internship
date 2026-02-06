@@ -16,11 +16,25 @@ from auth.auth import (
     create_access_token, get_current_user, get_current_user_ws
 )
 from routes.websocket import manager
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-app.include_router(authRoute.router)
-app.include_router(taskRoute.router)
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(authRoute.router, prefix="/api/auth", tags=["auth"])
+app.include_router(taskRoute.router, prefix="/api", tags=["tasks"])
+
+
+@app.get("/")
+async def hello_world():
+    print("hello world")
+    return "backend running smoothly"
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):

@@ -22,9 +22,12 @@ class TaskCreate(BaseModel):
     description: Optional[str] = None
     completed: bool = False
 
-class TaskResponse(TaskCreate):
+class TaskResponse(BaseModel):
     id: str
-    created_at: datetime
+    title: str
+    description: Optional[str] = None
+    completed: bool = False
+    created_at: str
 
 
 class TaskUpdate(BaseModel):

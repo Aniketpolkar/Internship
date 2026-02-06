@@ -51,6 +51,7 @@ router = APIRouter()
 # ---------- REGISTER ----------
 @router.post("/register", response_model=UserResponse)
 async def register(user: UserCreate, db=Depends(get_database)):
+    print("hello")
     existing = await db.users.find_one({"email": user.email})
     if existing:
         raise HTTPException(status_code=400, detail="Email already registered")
@@ -59,6 +60,7 @@ async def register(user: UserCreate, db=Depends(get_database)):
         "email": user.email,
         "hashed_password": hash_password(user.password)
     }
+    print(user.email)
 
     result = await db.users.insert_one(user_doc)
 

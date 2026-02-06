@@ -14,12 +14,7 @@ from auth.auth import (
     hash_password, verify_password,
     create_access_token, get_current_user, get_current_user_ws
 )
-router = APIRouter(tags=["tasks"])
-
-@router.get("/")
-async def hello_world():
-    print("hello world")
-    return "backend running smoothly"
+router = APIRouter()
 
 # # ---------- CREATE TASK (PROTECTED) ----------
 @router.post("/tasks", response_model=TaskResponse)
@@ -53,7 +48,7 @@ async def get_tasks(db=Depends(get_database),current_user=Depends(get_current_us
             "title": task["title"],
             "description": task.get("description"),
             "completed": task["completed"],
-            "created_at": task["created_at"]
+            "created_at": task["created_at"].isoformat()
         })
     return tasks
 

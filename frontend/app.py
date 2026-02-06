@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 import os
 
-API_URL = os.getenv("API_URL", "http://localhost:5050")
+API_URL = os.getenv("API_URL", "http://localhost:8000")
 
 st.set_page_config(page_title="Task Manager", layout="centered")
 
@@ -23,7 +23,7 @@ def api_headers():
 # ---------- AUTH ----------
 def login_user(email, password):
     return requests.post(
-        f"{API_URL}/login",
+        f"{API_URL}/api/auth/login",
         data={  # ✅ FORM DATA (OAuth2)
             "username": email,
             "password": password
@@ -33,8 +33,9 @@ def login_user(email, password):
 
 
 def register_user(email, password):
+    print(email)
     return requests.post(
-        f"{API_URL}/register",
+        f"{API_URL}/api/auth/register",
         json={  # ✅ JSON as expected by FastAPI
             "email": email,
             "password": password
@@ -44,12 +45,12 @@ def register_user(email, password):
 
 # ---------- TASKS ----------
 def get_tasks():
-    return requests.get(f"{API_URL}/tasks", headers=api_headers())
+    return requests.get(f"{API_URL}/api/tasks", headers=api_headers())
 
 
 def create_task(title, description):
     return requests.post(
-        f"{API_URL}/tasks",
+        f"{API_URL}/api/tasks",
         json={"title": title, "description": description},
         headers=api_headers()
     )
@@ -57,7 +58,7 @@ def create_task(title, description):
 
 def update_task(task_id, title, description):
     return requests.put(
-        f"{API_URL}/tasks/{task_id}",
+        f"{API_URL}/api/tasks/{task_id}",
         json={"title": title, "description": description},
         headers=api_headers()
     )
@@ -65,7 +66,7 @@ def update_task(task_id, title, description):
 
 def delete_task(task_id):
     return requests.delete(
-        f"{API_URL}/tasks/{task_id}",
+        f"{API_URL}/api/tasks/{task_id}",
         headers=api_headers()
     )
 
